@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestras cuentas</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Los gastos, claros.<br>Las cuentas, en paz.</h1>
+      <p>Anoten lo que paga cada uno y calculen cuánto tienen que compensarse.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="summary-grid">
+      <div class="card">
+        <div class="eyebrow">Gastos compartidos</div>
+        <div class="amount" id="total">$ 0</div>
+        <div class="small-note" id="count">Todavía no hay gastos cargados</div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Pagó Igna</div>
+        <div class="amount" id="paidYou">$ 0</div>
+        <div class="small-note">Total pagado por Igna</div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Pagó Orne</div>
+        <div class="amount" id="paidPartner">$ 0</div>
+        <div class="small-note">Total pagado por Orne</div>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="card">
+        <h2>Agregar un gasto</h2>
+        <p class="section-sub">Cargalo una sola vez y el saldo se actualiza solo.</p>
+
+        <form id="expenseForm">
+          <label for="description">¿En qué gastaron?</label>
+          <input id="description" maxlength="100"
+                 placeholder="Ej. Supermercado, nafta, internet" required>
+
+          <div class="row-fields">
+            <div>
+              <label for="amountInput">Importe ($)</label>
+              <input id="amountInput" type="text" inputmode="decimal"
+                    placeholder="Ej. 1.000" autocomplete="off" required>
+            </div>
+            <div>
+              <label for="paidBy">¿Quién pagó?</label>
+              <select id="paidBy">
+                <option value="you">Igna</option>
+                <option value="partner">Orne</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="dateInput">Fecha</label>
+          <input id="dateInput" type="date" required>
+          <button class="primary-btn" type="submit">＋ Registrar gasto</button>
+        </form>
+
+        <div class="balance-panel">
+          <div class="balance-title">Cómo quedan las cuentas</div>
+          <div class="balance-main" id="balanceMain">Están a mano</div>
+          <div class="balance-detail" id="balanceDetail">
+            Cuando carguen gastos, acá verán quién tiene que compensar a quién.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="list-head">
+          <div>
+            <h2>Movimientos</h2>
+            <p class="section-sub">Historial de gastos compartidos.</p>
+          </div>
+          <div class="actions">
+            <button type="button" class="secondary-btn" id="refreshBtn">Actualizar</button>
+            <button type="button" class="secondary-btn" id="closeMonthBtn">Cerrar mes</button>
+            <button type="button" class="secondary-btn" id="exportBtn">Exportar</button>
+            <button type="button" class="secondary-btn" id="importBtn">Importar</button>
+            <input type="file" id="importFile" accept="application/json,.json" hidden>
+          </div>
+        </div>
+
+        <div class="expense-list" id="expenseList">
+          <div class="empty">Cargando gastos...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card archive-section">
+      <h2>Meses cerrados</h2>
+      <p class="section-sub">Consultá los gastos y saldos de cada cierre anterior.</p>
+      <div id="archiveList">
+        <div class="empty">Cargando historial...</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="closeMonthModal">
+    <form class="modal" id="closeMonthForm">
+      <h2>Cerrar mes</h2>
+      <p>Los gastos activos se guardarán en el historial y dejarán de aparecer en la lista actual.</p>
+      <label for="monthName">Nombre del mes</label>
+      <input id="monthName" maxlength="60"
+             placeholder="Ej. Octubre 2026" required>
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn" id="cancelCloseMonth">Cancelar</button>
+        <button type="submit" class="primary-btn">Guardar cierre</button>
+      </div>
+    </form>
+  </div>
+
+  <footer>Hecho para compartir gastos de forma simple · Pesos argentinos (ARS)</footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
