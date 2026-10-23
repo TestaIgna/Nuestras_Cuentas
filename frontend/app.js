@@ -506,5 +506,17 @@ $("importFile").addEventListener("change", async event => {
   }
 });
 
+// Actualizar manualmente los datos compartidos del servidor.
+$("refreshBtn").addEventListener("click", async () => {
+  const button = $("refreshBtn");
+  if (busy) return;
+  button.disabled = true;
+  try {
+    await loadData();
+  } finally {
+    button.disabled = false;
+  }
+});
+
 // Arrancar la interfaz cargando los datos desde la API.
 loadData();

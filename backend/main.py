@@ -20,6 +20,13 @@ DATABASE_URL = os.getenv(
     f"sqlite:///{PROJECT_DIR / 'nuestras_cuentas.db'}",
 )
 
+# Neon entrega normalmente URLs postgresql://; usamos psycopg 3,
+# que es el controlador incluido en requirements.txt.
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+
 engine_options = {}
 if DATABASE_URL.startswith("sqlite"):
     engine_options["connect_args"] = {"check_same_thread": False}
