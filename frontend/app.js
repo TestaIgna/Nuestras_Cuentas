@@ -328,7 +328,35 @@ function renderArchives() {
           details.appendChild(row);
         });
 
-      card.append(title, meta, balance, details);
+      const actions = document.createElement("div");
+      actions.className = "archive-actions";
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "archive-delete-btn";
+      deleteButton.textContent = "Eliminar";
+      deleteButton.addEventListener("click", async () => {
+        if (busy) return;
+        if (!confirm(
+          `¿Eliminar el mes guardado "${archive.name}" y todos sus gastos? Esta acción no se puede deshacer.`
+        )) return;
+
+        busy = true;
+        deleteButton.disabled = true;
+        try {
+          await api(`/api/months/${archive.id}`, { method: "DELETE" });
+          await loadData();
+          alert(`El mes "${archive.name}" fue eliminado.`);
+        } catch (error) {
+          alert("No se pudo eliminar el mes: " + error.message);
+          deleteButton.disabled = false;
+        } finally {
+          busy = false;
+        }
+      });
+
+      actions.appendChild(deleteButton);
+      card.append(title, meta, balance, details, actions);
       list.appendChild(card);
     });
 }
@@ -503,18 +531,6 @@ $("importFile").addEventListener("change", async event => {
     await loadData();
   } finally {
     event.target.value = "";
-  }
-});
-
-// Actualizar manualmente los datos compartidos del servidor.
-$("refreshBtn").addEventListener("click", async () => {
-  const button = $("refreshBtn");
-  if (busy) return;
-  button.disabled = true;
-  try {
-    await loadData();
-  } finally {
-    button.disabled = false;
   }
 });
 

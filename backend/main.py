@@ -20,13 +20,6 @@ DATABASE_URL = os.getenv(
     f"sqlite:///{PROJECT_DIR / 'nuestras_cuentas.db'}",
 )
 
-# Neon entrega normalmente URLs postgresql://; usamos psycopg 3,
-# que es el controlador incluido en requirements.txt.
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
-elif DATABASE_URL.startswith("postgresql://"):
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
-
 engine_options = {}
 if DATABASE_URL.startswith("sqlite"):
     engine_options["connect_args"] = {"check_same_thread": False}
@@ -176,6 +169,18 @@ def get_month_archives():
             select(MonthArchive).order_by(MonthArchive.id.desc())
         ).all()
         return [archive_to_dict(a) for a in archives]
+
+
+@app.delete("/api/months/{archive_id}", status_code=204)
+def delete_month_archive(archive_id: int):
+    with SessionLocal() as db:
+        archive = db.get(MonthArchive, archive_id)
+        if archive is None:
+            raise HTTPException(status_code=404, detail="Mes guardado no encontrado")
+
+        db.delete(archive)
+        db.commit()
+        return Response(status_code=204)
 
 
 @app.post("/api/months/close", status_code=201)

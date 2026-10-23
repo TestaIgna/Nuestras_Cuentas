@@ -287,6 +287,32 @@ footer { padding: 28px 0 0; text-align: center; color: var(--muted); font-size: 
   font-weight: 750;
 }
 
+.archive-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.archive-delete-btn {
+  border: 1px solid color-mix(in srgb, var(--negative, #B85A48) 35%, var(--border));
+  background: transparent;
+  color: var(--negative, #B85A48);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.archive-delete-btn:hover {
+  background: color-mix(in srgb, var(--negative, #B85A48) 8%, transparent);
+}
+
+.archive-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 .archive-expense {
   display: flex;
   justify-content: space-between;
